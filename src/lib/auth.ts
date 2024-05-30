@@ -1,9 +1,10 @@
-import { useAuthStore } from "@/store/auth";
-import axiosInstance from "./axios";
+import axiosInstance from './axios';
+
+import { useAuthStore } from '@/store/auth';
 
 const login = async (email: string, password: string) => {
   try {
-    const response = await axiosInstance.post("/auth/login", {
+    const response = await axiosInstance.post('/auth/login', {
       email,
       password,
     });
@@ -12,20 +13,20 @@ const login = async (email: string, password: string) => {
     saveUser({ email, roles: [], accessToken });
     return response.data;
   } catch (error) {
-    console.error("Login error:", error);
+    console.error('Login error:', error);
     throw error;
   }
 };
 
 const getRoles = async () => {
   try {
-    const response = await axiosInstance.get("/user");
+    const response = await axiosInstance.get('/user');
     const { roles } = response.data;
     const { updateRoles } = useAuthStore.getState();
     updateRoles(roles);
     return response.data;
   } catch (error) {
-    console.error("Login error:", error);
+    console.error('Login error:', error);
     throw error;
   }
 };
@@ -33,17 +34,17 @@ const getRoles = async () => {
 const register = async (
   email: string,
   password: string,
-  passwordRepeat: string
+  passwordRepeat: string,
 ) => {
   try {
-    const response = await axiosInstance.post("/auth/register", {
+    const response = await axiosInstance.post('/auth/register', {
       email,
       password,
       passwordRepeat,
     });
     return response.data;
   } catch (error) {
-    console.error("Registration error:", error);
+    console.error('Registration error:', error);
     throw error;
   }
 };

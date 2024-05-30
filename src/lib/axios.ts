@@ -1,13 +1,14 @@
-import { useAuthStore } from "@/store/auth";
-import axios from "axios";
+import axios from 'axios';
 
-const DEFAULT_API_BASE_URL = "http://localhost:3000/api";
+import { useAuthStore } from '@/store/auth';
+
+const DEFAULT_API_BASE_URL = 'http://localhost:3000/api';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? DEFAULT_API_BASE_URL;
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
@@ -23,12 +24,12 @@ const setAccessToken = (token: string) => {
 
 const refreshTokens = async () => {
   try {
-    const response = await axiosInstance.post("/auth/refresh-tokens");
+    const response = await axiosInstance.post('/auth/refresh-tokens');
     const { accessToken } = response.data;
     setAccessToken(accessToken);
     return accessToken;
   } catch (error) {
-    console.error("Error refreshing tokens:", error);
+    console.error('Error refreshing tokens:', error);
     throw error;
   }
 };
@@ -37,11 +38,11 @@ axiosInstance.interceptors.request.use(
   (config) => {
     const token = getAccessToken();
     if (token) {
-      config.headers["Authorization"] = token;
+      config.headers['Authorization'] = token;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 axiosInstance.interceptors.response.use(
@@ -54,8 +55,8 @@ axiosInstance.interceptors.response.use(
 
       try {
         const newAccessToken = await refreshTokens();
-        axiosInstance.defaults.headers.common["Authorization"] = newAccessToken;
-        originalRequest.headers["Authorization"] = newAccessToken;
+        axiosInstance.defaults.headers.common['Authorization'] = newAccessToken;
+        originalRequest.headers['Authorization'] = newAccessToken;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         return Promise.reject(refreshError);
@@ -63,7 +64,7 @@ axiosInstance.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosInstance;

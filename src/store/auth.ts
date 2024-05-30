@@ -1,9 +1,9 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export enum Role {
-  ADMIN = "ADMIN",
-  USER = "USER",
+  ADMIN = 'ADMIN',
+  USER = 'USER',
 }
 
 export interface User {
@@ -56,7 +56,7 @@ export const useAuthStore = create<AuthState>()(
         }),
     }),
     {
-      name: "auth-storage",
-    }
-  )
+      name: 'auth-storage',
+    },
+  ),
 );

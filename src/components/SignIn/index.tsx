@@ -1,7 +1,10 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
+import { Button } from '../ui/button';
 import {
   Form,
   FormField,
@@ -9,30 +12,39 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { getRoles, login } from "@/lib/auth";
+} from '../ui/form';
+import { Input } from '../ui/input';
+import { PasswordInput } from '../ui/password-input';
+
+import { getRoles, login } from '@/lib/auth';
 
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
+    message: 'Password must be at least 8 characters.',
   }),
 });
 
 const SignIn = () => {
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
   async function onSubmit({ email, password }: z.infer<typeof formSchema>) {
-    await login(email, password);
-    await getRoles();
+    try {
+      await login(email, password);
+      await getRoles();
+      navigate('/');
+    } catch {
+      console.log('catch');
+      toast.error('Wrong email or password', {});
+    }
   }
 
   return (
@@ -65,7 +77,7 @@ const SignIn = () => {
                 <FormItem>
                   <FormLabel className="text-base">Password</FormLabel>
                   <FormControl>
-                    <Input
+                    <PasswordInput
                       className="text-base"
                       placeholder="password"
                       {...field}
