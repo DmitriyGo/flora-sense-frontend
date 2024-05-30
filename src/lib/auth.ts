@@ -9,7 +9,20 @@ const login = async (email: string, password: string) => {
     });
     const { accessToken } = response.data;
     const { saveUser } = useAuthStore.getState();
-    saveUser({ email, roles: [], accessToken }); // You might need to adjust the roles or other user details as per your response
+    saveUser({ email, roles: [], accessToken });
+    return response.data;
+  } catch (error) {
+    console.error("Login error:", error);
+    throw error;
+  }
+};
+
+const getRoles = async () => {
+  try {
+    const response = await axiosInstance.get("/user");
+    const { roles } = response.data;
+    const { updateRoles } = useAuthStore.getState();
+    updateRoles(roles);
     return response.data;
   } catch (error) {
     console.error("Login error:", error);
@@ -35,4 +48,4 @@ const register = async (
   }
 };
 
-export { login, register };
+export { login, register, getRoles };

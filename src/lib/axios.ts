@@ -1,8 +1,11 @@
 import { useAuthStore } from "@/store/auth";
 import axios from "axios";
 
+const DEFAULT_API_BASE_URL = "http://localhost:3000/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? DEFAULT_API_BASE_URL;
+
 const axiosInstance = axios.create({
-  baseURL: "https://your-api-base-url.com",
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -33,9 +36,8 @@ const refreshTokens = async () => {
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = getAccessToken();
-    console.log("request token ==>", token);
     if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
+      config.headers["Authorization"] = token;
     }
     return config;
   },
@@ -52,9 +54,7 @@ axiosInstance.interceptors.response.use(
 
       try {
         const newAccessToken = await refreshTokens();
-        axiosInstance.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${newAccessToken}`;
+        axiosInstance.defaults.headers.common["Authorization"] = newAccessToken;
         originalRequest.headers["Authorization"] = newAccessToken;
         return axiosInstance(originalRequest);
       } catch (refreshError) {

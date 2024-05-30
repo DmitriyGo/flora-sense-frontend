@@ -2,8 +2,8 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 export enum Role {
-  ADMIN = "Admin",
-  USER = "User",
+  ADMIN = "ADMIN",
+  USER = "USER",
 }
 
 export interface User {
@@ -16,6 +16,7 @@ interface AuthState {
   user: User | null;
   saveUser: (user: User) => void;
   updateToken: (token: string) => void;
+  updateRoles: (roles: Role[]) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -35,6 +36,19 @@ export const useAuthStore = create<AuthState>()(
               user: {
                 ...state.user,
                 accessToken: token,
+              },
+            };
+          }
+          return state;
+        }),
+      updateRoles: (roles) =>
+        set((state) => {
+          if (state.user) {
+            return {
+              ...state,
+              user: {
+                ...state.user,
+                roles,
               },
             };
           }
