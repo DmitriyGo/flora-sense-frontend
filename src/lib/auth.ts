@@ -1,10 +1,21 @@
 import axiosInstance from './axios';
 
-import { useAuthStore } from '@/store/auth';
+import { Role, useAuthStore } from '@/store/auth';
+
+interface LoginResponse {
+  accessToken: string;
+}
+
+interface RegisterResponse {
+  email: string;
+  id: string;
+  roles: Role[];
+  updatedAt: string;
+}
 
 const login = async (email: string, password: string) => {
   try {
-    const response = await axiosInstance.post('/auth/login', {
+    const response = await axiosInstance.post<LoginResponse>('/auth/login', {
       email,
       password,
     });
@@ -37,12 +48,26 @@ const register = async (
   passwordRepeat: string,
 ) => {
   try {
-    const response = await axiosInstance.post('/auth/register', {
+    const { data: user } = await axiosInstance.post<RegisterResponse>(
+      '/auth/register',
+      {
+        email,
+        password,
+        passwordRepeat,
+      },
+    );
+    const {
+      data: { accessToken },
+    } = await axiosInstance.post<LoginResponse>('/auth/login', {
       email,
       password,
-      passwordRepeat,
     });
-    return response.data;
+
+    const { saveUser } = useAuthStore.getState();
+    const userData = { email, roles: user.roles, accessToken };
+
+    saveUser(userData);
+    return userData;
   } catch (error) {
     console.error('Registration error:', error);
     throw error;
