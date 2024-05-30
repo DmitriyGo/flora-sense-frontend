@@ -17,6 +17,7 @@ interface AuthState {
   saveUser: (user: User) => void;
   updateToken: (token: string) => void;
   updateRoles: (roles: Role[]) => void;
+  clearUser: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -54,6 +55,7 @@ export const useAuthStore = create<AuthState>()(
           }
           return state;
         }),
+      clearUser: () => set(() => ({ user: null })),
     }),
     {
       name: 'auth-storage',

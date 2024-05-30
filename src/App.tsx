@@ -4,6 +4,7 @@ import Admin from './components/Admin';
 import Dashboard from './components/Dashboard';
 import Home from './components/Home';
 import MyPlants from './components/MyPlants';
+import { Navbar } from './components/navbar';
 import NotFound from './components/NotFound';
 import PlantDetail from './components/PlantDetail';
 import Profile from './components/Profile';
@@ -15,6 +16,7 @@ export default function App() {
   return (
     <>
       <Router>
+        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />

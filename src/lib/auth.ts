@@ -49,4 +49,15 @@ const register = async (
   }
 };
 
-export { login, register, getRoles };
+const logout = async () => {
+  try {
+    const { clearUser } = useAuthStore.getState();
+    clearUser();
+    await axiosInstance.post('/auth/logout');
+  } catch (error) {
+    console.error('Logout error:', error);
+    throw error;
+  }
+};
+
+export { login, register, getRoles, logout };

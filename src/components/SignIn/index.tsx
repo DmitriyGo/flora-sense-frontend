@@ -48,7 +48,7 @@ const SignIn = () => {
   }
 
   return (
-    <div className="flex flex-col items-center max-w-[80%] mx-auto mt-32 gap-8">
+    <div className="flex flex-col items-center max-w-[40%] mx-auto mt-32 gap-8">
       <h2 className="text-5xl font-semibold">SignIn</h2>
       <div className="border p-4 rounded-xl w-full">
         <Form {...form}>
