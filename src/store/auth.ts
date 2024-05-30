@@ -1,0 +1,48 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+export enum Role {
+  ADMIN = "Admin",
+  USER = "User",
+}
+
+export interface User {
+  email: string;
+  roles: Role[];
+  accessToken: string;
+}
+
+interface AuthState {
+  user: User | null;
+  saveUser: (user: User) => void;
+  updateToken: (token: string) => void;
+}
+
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      saveUser: (user) =>
+        set((state) => ({
+          ...state,
+          user: user,
+        })),
+      updateToken: (token) =>
+        set((state) => {
+          if (state.user) {
+            return {
+              ...state,
+              user: {
+                ...state.user,
+                accessToken: token,
+              },
+            };
+          }
+          return state;
+        }),
+    }),
+    {
+      name: "auth-storage",
+    }
+  )
+);
