@@ -2,7 +2,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Admin from './components/Admin';
-import Dashboard from './components/Dashboard';
 import Home from './components/Home';
 import MyPlants from './components/MyPlants';
 import { Navbar } from './components/navbar';
@@ -21,7 +20,6 @@ export default function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/my-plants" element={<MyPlants />} />
           <Route path="/my-plants/:id" element={<PlantDetail />} />
           <Route path="/sign-in" element={<SignIn />} />

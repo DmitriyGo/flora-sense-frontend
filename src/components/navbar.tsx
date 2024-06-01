@@ -32,7 +32,6 @@ export const Navbar = () => {
       <nav className="w-full grid grid-cols-5 grid-rows-1 items-center py-4 px-16">
         <div className="flex col-span-2 justify-start gap-6 [&>a:hover]:underline">
           <Link to="/">Home</Link>
-          <Link to="/dashboard">Dashboard</Link>
           <Link to="/my-plants">My Plants</Link>
           {user?.roles.includes(Role.ADMIN) ? (
             <Link to="/admin">Admin</Link>
