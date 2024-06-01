@@ -1,4 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader } from 'lucide-react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -36,6 +38,8 @@ const formSchema = z
 const SignUp = () => {
   const navigate = useNavigate();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,11 +55,15 @@ const SignUp = () => {
     confirmPassword,
   }: z.infer<typeof formSchema>) {
     try {
+      setIsLoading(true);
       await register(email, password, confirmPassword);
       await getRoles();
+      toast.success('Successfully signed up', {});
       navigate('/');
     } catch {
       toast.error('Failed to sign up', {});
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -116,7 +124,9 @@ const SignUp = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit">
+              {isLoading ? <Loader className="animate-spin" /> : 'Submit'}
+            </Button>
           </form>
         </Form>
       </div>

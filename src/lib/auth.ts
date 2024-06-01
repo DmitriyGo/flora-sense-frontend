@@ -78,7 +78,7 @@ const logout = async () => {
   try {
     const { clearUser } = useAuthStore.getState();
     clearUser();
-    await axiosInstance.post('/auth/logout');
+    await axiosInstance.get('/auth/logout');
   } catch (error) {
     console.error('Logout error:', error);
     throw error;

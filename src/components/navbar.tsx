@@ -28,23 +28,20 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="flex w-full border-b">
-      <nav className="w-full grid grid-cols-5 items-center py-4 px-16">
-        <div />
-
-        <div className="col-span-3 flex justify-center gap-12 [&>a:hover]:underline">
+    <header className="w-full bg-green-600 text-white">
+      <nav className="w-full grid grid-cols-5 grid-rows-1 items-center py-4 px-16">
+        <div className="flex col-span-2 justify-start gap-6 [&>a:hover]:underline">
           <Link to="/">Home</Link>
           <Link to="/dashboard">Dashboard</Link>
           <Link to="/my-plants">My Plants</Link>
-          <Link to="/sign-in">Sign In</Link>
-          <Link to="/sign-up">Sign Up</Link>
-          <Link to="/profile">Profile</Link>
           {user?.roles.includes(Role.ADMIN) ? (
             <Link to="/admin">Admin</Link>
           ) : null}
         </div>
 
-        <div className="flex justify-end gap-4">
+        <h1 className="text-3xl text-center font-bold">FloraSense</h1>
+
+        <div className="flex col-span-2 justify-end gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger className="fou">
               <Globe />
@@ -100,6 +97,6 @@ export const Navbar = () => {
           </DropdownMenu>
         </div>
       </nav>
-    </div>
+    </header>
   );
 };
