@@ -1,78 +1,27 @@
-import { useQuery } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import axiosInstance from '@/lib/axios';
+import { Button } from '../ui/button';
+
+import { usePlantData } from '@/lib/plants';
 import { useAuthStore } from '@/store/auth';
-
-const fetchAverageParameters = async (plantId: string) => {
-  const response = await axiosInstance.get(`/plant-data/average/${plantId}`);
-  return response.data;
-};
-
-const fetchParameterTrends = async (plantId: string) => {
-  const response = await axiosInstance.get(`/plant-data/trends/${plantId}`);
-  return response.data;
-};
-
-const fetchParameterCorrelations = async (plantId: string) => {
-  const response = await axiosInstance.get(
-    `/plant-data/correlations/${plantId}`,
-  );
-  return response.data;
-};
-
-const fetchPlantData = async (plantId: string) => {
-  const response = await axiosInstance.get(`/plant-data/${plantId}`);
-  return response.data;
-};
-
-const fetchPlantInfo = async (plantId: string) => {
-  const response = await axiosInstance.get(`/plants/${plantId}`);
-  return response.data;
-};
 
 const PlantDetails: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const { id } = useParams<{ id: string }>();
 
-  const { data: averageParameters } = useQuery({
-    queryKey: ['averageParameters', id],
-    queryFn: () => (id ? fetchAverageParameters(id) : null),
-  });
-
-  const { data: parameterTrends } = useQuery({
-    queryKey: ['parameterTrends', id],
-    queryFn: () => (id ? fetchParameterTrends(id) : null),
-  });
-
-  const { data: parameterCorrelations } = useQuery({
-    queryKey: ['parameterCorrelations', id],
-    queryFn: () => (id ? fetchParameterCorrelations(id) : null),
-  });
-
-  const { data: plantData } = useQuery({
-    queryKey: ['plantData', id],
-    queryFn: () => (id ? fetchPlantData(id) : null),
-  });
-
-  const { data: plantInfo } = useQuery({
-    queryKey: ['plantInfo', id],
-    queryFn: () => (id ? fetchPlantInfo(id) : null),
-  });
+  const { data } = usePlantData(id);
 
   useEffect(() => {
     if (!user?.accessToken) navigate('/');
   }, [navigate, user]);
 
-  if (
-    !averageParameters ||
-    !parameterTrends ||
-    !parameterCorrelations ||
-    !plantData ||
-    !plantInfo
-  ) {
+  const handleEdit = () => {
+    navigate(`/my-plants/${id}/edit`);
+  };
+
+  if (!data) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-2xl text-gray-500">Loading...</div>
@@ -80,11 +29,25 @@ const PlantDetails: React.FC = () => {
     );
   }
 
+  const {
+    averageParameters,
+    parameterTrends,
+    parameterCorrelations,
+    plantData,
+    plantInfo,
+  } = data;
+
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-16">
-      <h1 className="text-4xl font-extrabold text-center mb-8">
-        {plantInfo.name}
-      </h1>
+      <div className="grid grid-cols-3 items-center mb-8 gap-">
+        <div />
+        <h1 className="text-4xl font-extrabold text-center">
+          {plantInfo.name}
+        </h1>
+        <Button className="ml-auto" onClick={handleEdit}>
+          Edit
+        </Button>
+      </div>
 
       <div className="bg-white shadow-md rounded-lg overflow-hidden mb-8 p-6 flex justify-between">
         <div>

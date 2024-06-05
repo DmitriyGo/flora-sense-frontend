@@ -1,3 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
+
 import axiosInstance from './axios';
 
 export interface Plant {
@@ -31,7 +33,7 @@ export interface PlantData {
   timestamp: string;
 }
 
-const getMyPlants = async () => {
+export const getMyPlants = async () => {
   try {
     const response = await axiosInstance.get<Plant[]>('/plants/my');
     return response.data;
@@ -41,7 +43,7 @@ const getMyPlants = async () => {
   }
 };
 
-const getAllPlants = async () => {
+export const getAllPlants = async () => {
   try {
     const response = await axiosInstance.get<Plant[]>('/plants');
     return response.data;
@@ -51,4 +53,57 @@ const getAllPlants = async () => {
   }
 };
 
-export { getMyPlants, getAllPlants };
+export const fetchPlantData = async (plantId: string) => {
+  const response = await axiosInstance.get(`/plant-data/${plantId}`);
+  return response.data;
+};
+
+export const fetchPlantInfo = async (plantId: string) => {
+  const response = await axiosInstance.get(`/plants/${plantId}`);
+  return response.data;
+};
+
+export const fetchAverageParameters = async (plantId: string) => {
+  const response = await axiosInstance.get(`/plant-data/average/${plantId}`);
+  return response.data;
+};
+
+export const fetchParameterTrends = async (plantId: string) => {
+  const response = await axiosInstance.get(`/plant-data/trends/${plantId}`);
+  return response.data;
+};
+
+export const fetchParameterCorrelations = async (plantId: string) => {
+  const response = await axiosInstance.get(
+    `/plant-data/correlations/${plantId}`,
+  );
+  return response.data;
+};
+
+export const usePlantData = (id?: string) => {
+  const fetchData = async () => {
+    if (!id) return null;
+    const [
+      averageParameters,
+      parameterTrends,
+      parameterCorrelations,
+      plantData,
+      plantInfo,
+    ] = await Promise.all([
+      fetchAverageParameters(id),
+      fetchParameterTrends(id),
+      fetchParameterCorrelations(id),
+      fetchPlantData(id),
+      fetchPlantInfo(id),
+    ]);
+    return {
+      averageParameters,
+      parameterTrends,
+      parameterCorrelations,
+      plantData,
+      plantInfo,
+    };
+  };
+
+  return useQuery({ queryFn: fetchData, queryKey: ['plantData', id] });
+};

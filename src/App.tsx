@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Admin from './components/Admin';
 import Home from './components/Home';
 import MyPlants from './components/MyPlants';
+import PlantForm from './components/MyPlants/PlantForm';
 import { Navbar } from './components/navbar';
 import NotFound from './components/NotFound';
 import PlantDetail from './components/PlantDetail';
@@ -21,7 +22,9 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/my-plants" element={<MyPlants />} />
+          <Route path="/my-plants/new" element={<PlantForm />} />
           <Route path="/my-plants/:id" element={<PlantDetail />} />
+          <Route path="/my-plants/:id/edit" element={<PlantForm />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/profile" element={<Profile />} />

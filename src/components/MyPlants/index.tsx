@@ -18,6 +18,10 @@ const MyPlants = () => {
     navigate(`/my-plants/${id}`);
   };
 
+  const handleAddPlantClick = () => {
+    navigate('/my-plants/new');
+  };
+
   useEffect(() => {
     if (!user?.accessToken) navigate('/');
   }, [navigate, user]);
@@ -82,6 +86,9 @@ const MyPlants = () => {
             </Button>
           </div>
         ))}
+      </div>
+      <div className="mt-8">
+        <Button onClick={handleAddPlantClick}>Add Plant</Button>
       </div>
     </div>
   );
