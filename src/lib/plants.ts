@@ -63,6 +63,11 @@ export const fetchPlantInfo = async (plantId: string) => {
   return response.data;
 };
 
+export const deletePlant = async (plantId: string) => {
+  const response = await axiosInstance.delete(`/plants/${plantId}`);
+  return response.data;
+};
+
 export const fetchAverageParameters = async (plantId: string) => {
   const response = await axiosInstance.get(`/plant-data/average/${plantId}`);
   return response.data;

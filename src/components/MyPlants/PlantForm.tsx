@@ -33,11 +33,13 @@ const fetchPlantTypes = async () => {
   return response.data;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const createPlant = async (plantData: any) => {
   const response = await axiosInstance.post('/plants', plantData);
   return response.data;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const updatePlant = async (id: string, plantData: any) => {
   const response = await axiosInstance.patch(`/plants/${id}`, plantData);
   return response.data;
